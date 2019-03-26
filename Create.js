@@ -1,231 +1,147 @@
-// Constants for the program
-var TOP_GAP = 40;
-var BOTTOM_GAP = 40;
-var BORDER_GAP = 60;
-var NUM_BITS = 4;
-var BIT_SPACING = 10;
-var BIT_WIDTH = (getWidth() - BORDER_GAP*2 - BIT_SPACING*(NUM_BITS)) / NUM_BITS;
-var BIT_HEIGHT = 30;
-var BIT_TO_DECIMAL_GAP = 20;
-var MESSAGE_TO_POINTS_GAP = 40;
-var WELCOME_MESSAGE_TIME = 1500;
-var RESET_TIME = 1000;
-var NUMBER_BASE = 16;
-var BACKGROUND_COLOR = new Color(86, 223, 208);
-var FONT_COLOR = Color.white;
-
-// Global variables that define the game state.
-// Used by several different functions
-var titleLabel; 
-var binaryButtons = [];
-var decimalLabels = [];
-var hexResultLabel;
-var targetLabel;
-var scoreLabel;
-var score;
-
-// Start the game by initializing the window and displaying a message
-function start() {
-    initGame();
-    setTimeout(play, WELCOME_MESSAGE_TIME);
-}
-
-// Start playing the game by displaying the task and waiting for clicks
-function play() {
-    displayTitle("Match the target value");
-    mouseClickMethod(handleClick);
-}
-
-// Handles a click by checking if the user clicked on a bit
-// If they did, flip the bit and compute the new result.
-// If the result matches the target, award points and reset for a new round
-function handleClick(e) {
-    var elem = getElementAt(e.getX(), e.getY());
-    var buttonIndex = binaryButtons.indexOf(elem);
-    
-    if(buttonIndex != -1) {
-        var button = binaryButtons[buttonIndex];
-        toggleButton(button);
-        var hexValue = computeBinaryValue();
-        
-        remove(hexResultLabel);
-        hexResultLabel = computeDecimalResultLabel();
-        add(hexResultLabel);
-        
-        if(hexValue == targetLabel.getText()) {
-            displayTitle("NICE!");
-            score += parseInt(hexValue, NUMBER_BASE);
-            displayScoreLabel(score);
-            setTimeout(reset, RESET_TIME);
-        }
+(function() {
+  const myQuestions = [
+    {
+      question: "In 2004. what team went an undefeated season in the premier league and was regarded as The Invincibles?",
+      answers: {
+        a: "Manchester City",
+        b: "Chelsea",
+        c: "Arsenal",
+        d: "Manchester United",
+      },
+      correctAnswer: "c"
+    },
+    {
+      question: "What team has the most Champions League trophies?",
+      answers: {
+        a: "Bayern Munich",
+        b: "Leeds United",
+        c: "Real Madrid",
+        d: "FC Barcelona",
+      },
+      correctAnswer: "c"
+    },
+    {
+      question: "In 2012, a soccer player scored 91 goals in a calendar year. Who was this player?",
+      answers: {
+        a: "Cristiano Ronaldo",
+        b: "Lionel Messi",
+        c: "Arjen Robben",
+        d: "Zlatan Ibrahimovic"
+      },
+      correctAnswer: "b"
     }
-}
+  ];
 
-// Resets the target and the bits for a new round
-function reset() {
-    displayTitle("Match the target value");
-    for(var i = 0; i < NUM_BITS; i++) {
-        binaryButtons[i].setText("0");
-    }
-    remove(hexResultLabel);
-    generateRandomTarget();
-}
+  function buildQuiz() {
+    // we'll need a place to store the HTML output
+    const output = [];
 
-// Computes the current value according to the bits
-function computeBinaryValue() {
-    var binaryString = "";
-    for(var i = 0; i < NUM_BITS; i++) {
-        binaryString += binaryButtons[i].getText();
-    }
-    
-    return parseInt(binaryString, 2).toString(NUMBER_BASE).toUpperCase();
-}
+    // for each question...
+    myQuestions.forEach((currentQuestion, questionNumber) => {
+      // we'll want to store the list of answer choices
+      const answers = [];
 
-// Computes and displays the decimal result label according to the bits that are turned "on"
-function computeDecimalResultLabel() {
-    var resultString = "";
-    var bitCount = 0;
-    for(var i = 0; i < NUM_BITS; i++) {
-        if(binaryButtons[i].getText() == "1") {
-            bitCount++;
-            if(resultString.length != 0) {
-                resultString += " + ";
-            }
-            resultString += decimalLabels[i].getText();
-        }
-    }
+      // and for each available answer...
+      for (letter in currentQuestion.answers) {
+        // ...add an HTML radio button
+        answers.push(
+          `<label>
+             <input type="radio" name="question${questionNumber}" value="${letter}">
+              ${letter} :
+              ${currentQuestion.answers[letter]}
+           </label>`
+        );
+      }
+
+      // add this question and its answers to the output
+      output.push(
+        `<div class="slide">
+           <div class="question"> ${currentQuestion.question} </div>
+           <div class="answers"> ${answers.join("")} </div>
+         </div>`
+      );
+    });
+
+    // finally combine our output list into one string of HTML and put it on the page
+    quizContainer.innerHTML = output.join("");
+  }
+
+  function showResults() {
+    // gather answer containers from our quiz
+    const answerContainers = quizContainer.querySelectorAll(".answers");
+
+    // keep track of user's answers
+    let numCorrect = 0;
+
+    // for each question...
+    myQuestions.forEach((currentQuestion, questionNumber) => {
+      // find selected answer
+      const answerContainer = answerContainers[questionNumber];
+      const selector = `input[name=question${questionNumber}]:checked`;
+      const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+
+      // if answer is correct
+      if (userAnswer === currentQuestion.correctAnswer) {
+        // add to the number of correct answers
+        numCorrect++;
+
+        // color the answers green
+        answerContainers[questionNumber].style.color = "lightgreen";
+      } else {
+        // if answer is wrong or blank
+        // color the answers red
+        answerContainers[questionNumber].style.color = "red";
+      }
+    });
+
+    // show number of correct answers out of total
+    resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
+  }
+
+  function showSlide(n) {
+    slides[currentSlide].classList.remove("active-slide");
+    slides[n].classList.add("active-slide");
+    currentSlide = n;
     
-    resultString += " = " + computeBinaryValue();
-    
-    var font;
-    if(bitCount <= 4) {
-        font = "20pt Courier";    
-    } else if(bitCount <= 6) {
-        font = "15pt Courier";
+    if (currentSlide === 0) {
+      previousButton.style.display = "none";
     } else {
-        font = "12pt Courier";
+      previousButton.style.display = "inline-block";
     }
     
-    var resultLabel = new Text(resultString, font);
-    var x = getWidth() / 2 - resultLabel.getWidth() / 2;
-    var y = getHeight() / 3 * 2;
-    resultLabel.setPosition(x, y);
-    resultLabel.setColor(FONT_COLOR);
-    
-    return resultLabel;
-}
-
-// Flips a given bit label from 0 to 1 or vice versa
-function toggleButton(buttonLabel) {
-    if(buttonLabel.getText() == "0") {
-        buttonLabel.setText("1");
+    if (currentSlide === slides.length - 1) {
+      nextButton.style.display = "none";
+      submitButton.style.display = "inline-block";
+    } else {
+      nextButton.style.display = "inline-block";
+      submitButton.style.display = "none";
     }
-    else {
-        buttonLabel.setText("0");
-    }
-}
+  }
 
-// Initializes the initial game state
-function initGame() {
-    setBackgroundColor(BACKGROUND_COLOR);
-    displayTitle("Welcome to the Binary Challenge");
-    score = 0;
-    displayScoreLabel(score);
-    addBinaryButtons();
-    addDecimalLabels();
-    generateRandomTarget();
-    enterTheMatrix();
-}
+  function showNextSlide() {
+    showSlide(currentSlide + 1);
+  }
 
-function enterTheMatrix() {
-    // TODO: enter the matrix
-}
+  function showPreviousSlide() {
+    showSlide(currentSlide - 1);
+  }
 
-// Sets the background to be the given color
-function setBackgroundColor(color) {
-    var background = new Rectangle(getWidth(), getHeight());
-    background.setPosition(0, 0);
-    background.setColor(color);
-    add(background);
-}
+  const quizContainer = document.getElementById("quiz");
+  const resultsContainer = document.getElementById("results");
+  const submitButton = document.getElementById("submit");
 
-// Displays the current score to be the given points passed in
-function displayScoreLabel(points) {
-    remove(scoreLabel);
-    
-    scoreLabel = new Text("Score: " + points, "13pt Courier");
-    var x = getWidth() / 2 - scoreLabel.getWidth() / 2;
-    var y = titleLabel.getY() + MESSAGE_TO_POINTS_GAP;
-    scoreLabel.setPosition(x, y);
-    scoreLabel.setColor(FONT_COLOR);
-    
-    add(scoreLabel);
-}
+  // display quiz right away
+  buildQuiz();
 
-// Displays a given title message at the top of the game window
-function displayTitle(titleString) {
-    remove(titleLabel);
-    
-    titleLabel = new Text(titleString, "15pt Courier");
-    var x = getWidth() / 2 - titleLabel.getWidth() / 2;
-    var y = TOP_GAP;
-    titleLabel.setPosition(x, y);
-    titleLabel.setColor(FONT_COLOR);
-    
-    add(titleLabel);
-}
+  const previousButton = document.getElementById("previous");
+  const nextButton = document.getElementById("next");
+  const slides = document.querySelectorAll(".slide");
+  let currentSlide = 0;
 
-// Adds all the bits to the screen and stores them in the binaryButtons array
-function addBinaryButtons() {
-    for(var i = 0; i < NUM_BITS; i++) {
-        var bitLabel = new Text("0", "30pt Courier");
-        var x = BORDER_GAP + (BIT_WIDTH + BIT_SPACING)*i + bitLabel.getWidth() / 2;
-        var y = getHeight() / 3;
-        bitLabel.setPosition(x, y);
-        bitLabel.setColor(FONT_COLOR);
-        
-        add(bitLabel);
-        binaryButtons.push(bitLabel);
-    }
-}
+  showSlide(0);
 
-// Adds all the decimal labels to the screen (8, 4, 2, 1) underneath each bit
-function addDecimalLabels() {
-    for(var i = 0; i < NUM_BITS; i++) {
-        var placeValue = "" + Math.pow(2, NUM_BITS - (i + 1));
-        var decimalLabel = new Text(placeValue, "16pt Courier");
-        var x = binaryButtons[i].getX();
-        if(decimalLabel.getWidth() > BIT_WIDTH) {
-            x -= decimalLabel.getWidth() / 4;
-        }
-        else if (placeValue.length == 1) {
-            x += decimalLabel.getWidth() / 2;
-        }
-        var y = binaryButtons[i].getY() + BIT_TO_DECIMAL_GAP + decimalLabel.getHeight();
-        
-        decimalLabel.setPosition(x, y);
-        decimalLabel.setColor(FONT_COLOR);
-        
-        decimalLabels.push(decimalLabel);
-        
-        add(decimalLabel);
-    }
-}
-
-// Generates a random target value and displays it at the bottom of the screen
-function generateRandomTarget() {
-    var max = Math.pow(2, NUM_BITS) - 1;
-    var val = Randomizer.nextInt(0, max);
-    val = val.toString(NUMBER_BASE).toUpperCase();
-    
-    remove(targetLabel);
-    
-    targetLabel = new Text(val, "40pt Courier");
-    var x = getWidth() / 2 - targetLabel.getWidth() / 2;
-    var y = getHeight() - BOTTOM_GAP;
-    
-    targetLabel.setPosition(x, y);
-    targetLabel.setColor(FONT_COLOR);
-    
-    add(targetLabel);
-}
+  // on submit, show results
+  submitButton.addEventListener("click", showResults);
+  previousButton.addEventListener("click", showPreviousSlide);
+  nextButton.addEventListener("click", showNextSlide);
+})();
