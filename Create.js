@@ -29,7 +29,27 @@
         d: "Zlatan Ibrahimovic"
       },
       correctAnswer: "b"
-    }
+    },
+    {
+      question: "What player scored the final goal in Barcelona's historic 6-1 win against PSG in 2017?",
+      answers: {
+        a: "Sergi Roberto".
+        b: "Lionel Messi",
+        c: "Jordi Alba",
+        d: "Andres Iniesta",
+      },
+      correctAnswer: "a"
+    },
+    {
+      question: "Which of these players has won a world cup but never a champions league?".
+      answers: {
+        a: "Andres Iniesta",
+        b: "Rafael Varane",
+        c: "Gianluigi Buffon",
+        d: "Wesley Sneijder",
+    },
+    correctAnswer: "c"
+    },
   ];
 
   function buildQuiz() {
