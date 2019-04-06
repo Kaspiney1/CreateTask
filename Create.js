@@ -56,14 +56,12 @@
     // we'll need a place to store the HTML output
     const output = [];
 
-    // for each question...
+    // for each question, I store a list of answer choices
     myQuestions.forEach((currentQuestion, questionNumber) => {
-      // we'll want to store the list of answer choices
       const answers = [];
 
-      // and for each available answer...
+      // and for each available answer, store an HTML radio button,
       for (letter in currentQuestion.answers) {
-        // ...add an HTML radio button
         answers.push(
           `<label>
              <input type="radio" name="question${questionNumber}" value="${letter}">
