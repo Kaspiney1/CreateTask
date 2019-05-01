@@ -1,165 +1,66 @@
-(function() {
-  const myQuestions = [
-    {
-      question: "In 2004. what team went an undefeated season in the premier league and was regarded as The Invincibles?",
-      answers: {
-        a: "Manchester City",
-        b: "Chelsea",
-        c: "Arsenal",
-        d: "Manchester United",
-      },
-      correctAnswer: "c"
-    },
-    {
-      question: "What team has the most Champions League trophies?",
-      answers: {
-        a: "Bayern Munich",
-        b: "Leeds United",
-        c: "Real Madrid",
-        d: "FC Barcelona",
-      },
-      correctAnswer: "c"
-    },
-    {
-      question: "In 2012, a soccer player scored 91 goals in a calendar year. Who was this player?",
-      answers: {
-        a: "Cristiano Ronaldo",
-        b: "Lionel Messi",
-        c: "Arjen Robben",
-        d: "Zlatan Ibrahimovic"
-      },
-      correctAnswer: "b"
-    },
-    {
-      question: "What player scored the final goal in Barcelona's historic 6-1 win against PSG in 2017?",
-      answers: {
-        a: "Sergi Roberto".
-        b: "Lionel Messi",
-        c: "Jordi Alba",
-        d: "Andres Iniesta",
-      },
-      correctAnswer: "a"
-    },
-    {
-      question: "Which of these players has won a world cup but never a champions league?".
-      answers: {
-        a: "Andres Iniesta",
-        b: "Rafael Varane",
-        c: "Gianluigi Buffon",
-        d: "Wesley Sneijder",
-    },
-    correctAnswer: "c"
-    },
-  ];
-
-  function buildQuiz() {
-    // we'll need a place to store the HTML output
-    const output = [];
-
-    // for each question, I store a list of answer choices
-    myQuestions.forEach((currentQuestion, questionNumber) => {
-      const answers = [];
-
-      // and for each available answer, store an HTML radio button,
-      for (letter in currentQuestion.answers) {
-        answers.push(
-          `<label>
-             <input type="radio" name="question${questionNumber}" value="${letter}">
-              ${letter} :
-              ${currentQuestion.answers[letter]}
-           </label>`
-        );
-      }
-
-      // add this question and its answers to the output
-      output.push(
-        `<div class="slide">
-           <div class="question"> ${currentQuestion.question} </div>
-           <div class="answers"> ${answers.join("")} </div>
-         </div>`
-      );
-    });
-
-    // finally combine our output list into one string of HTML and put it on the page
-    quizContainer.innerHTML = output.join("");
-  }
-
-  function showResults() {
-    // gather answer containers from our quiz
-    const answerContainers = quizContainer.querySelectorAll(".answers");
-
-    // keep track of user's answers
-    let numCorrect = 0;
-
-    // for each question...
-    myQuestions.forEach((currentQuestion, questionNumber) => {
-      // find selected answer
-      const answerContainer = answerContainers[questionNumber];
-      const selector = `input[name=question${questionNumber}]:checked`;
-      const userAnswer = (answerContainer.querySelector(selector) || {}).value;
-
-      // if answer is correct
-      if (userAnswer === currentQuestion.correctAnswer) {
-        // add to the number of correct answers
-        numCorrect++;
-
-        // color the answers green
-        answerContainers[questionNumber].style.color = "lightgreen";
-      } else {
-        // if answer is wrong or blank
-        // color the answers red
-        answerContainers[questionNumber].style.color = "red";
-      }
-    });
-
-    // show number of correct answers out of total
-    resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
-  }
-
-  function showSlide(n) {
-    slides[currentSlide].classList.remove("active-slide");
-    slides[n].classList.add("active-slide");
-    currentSlide = n;
-    
-    if (currentSlide === 0) {
-      previousButton.style.display = "none";
-    } else {
-      previousButton.style.display = "inline-block";
+function check(){
+  alert("Scroll down to see your score")
+  var name = prompt("Enter your name")
+  var question1 = document.getElementById("q1").value;
+  var question2 = document.getElementById("q2").value;
+  var question3 = document.getElementById("q3").value;
+  var question4 = document.getElementById("q4").value;
+  var question5 = document.getElementById("q5").value;
+  var question6 = document.getElementById("q6").value;
+  var question7 = document.getElementById("q7").value;
+  var question8 = document.getElementById("q8").value;
+  var question9 = document.getElementById("q9").value;
+  var question10 = document.getElementById("q10").value;
+  var correct = 0;
+  
+     if (question1 == "4") {
+       correct++;
+     }
+    if (question2 == "6") {
+       correct++;
+     }
+    if (question3 == "0") {
+       correct++;
+     }
+    if (question4 == "5") {
+       correct++;
+     }
+    if (question5 == "0") {
+       correct++;
+     }
+    if (question6 == "5") {
+        correct++;
+     }
+    if (question7 == "1") {
+       correct++;
+     }
+    if (question8 == "0") {
+       correct++;
+     }
+    if (question9 == "1") {
+       correct++;
+     }
+    if (question10== "3") {
+       correct++;
+     }
+  console.log(correct)
+  var messages = ["Great Job!", "That's just decent", "Your football knowledge is awful"];
+  
+  var range;
+  
+    if (correct < 3) {
+      range = 2;
     }
-    
-    if (currentSlide === slides.length - 1) {
-      nextButton.style.display = "none";
-      submitButton.style.display = "inline-block";
-    } else {
-      nextButton.style.display = "inline-block";
-      submitButton.style.display = "none";
+  
+    if (correct >= 3 && correct < 7) {
+      range = 1;
     }
-  }
-
-  function showNextSlide() {
-    showSlide(currentSlide + 1);
-  }
-
-  function showPreviousSlide() {
-    showSlide(currentSlide - 1);
-  }
-
-  const quizContainer = document.getElementById("quiz");
-  const resultsContainer = document.getElementById("results");
-  const submitButton = document.getElementById("submit");
-
-  // display quiz right away
-  buildQuiz();
-
-  const previousButton = document.getElementById("previous");
-  const nextButton = document.getElementById("next");
-  const slides = document.querySelectorAll(".slide");
-  let currentSlide = 0;
-
-  showSlide(0);
-
-  // on submit, show results
-  submitButton.addEventListener("click", showResults);
-  previousButton.addEventListener("click", showPreviousSlide);
-  nextButton.addEventListener("click", showNextSlide);
-})();
+  
+    if (correct >= 7) {
+      range = 0;
+    }
+  
+  
+  document.getElementById("message").innerHTML = messages[range];
+  document.getElementById("number_correct").innerHTML = name + " got " + correct + " correct.";
+}
