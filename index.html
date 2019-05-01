@@ -2,15 +2,94 @@
 <html>
   <head>
     <title>Soccer Quiz</title>
-  <script type="text/javascript" src="Create.js"></script>
-  <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="style.css" rel="stylesheet"/>
+    <script src = "create.js"></script>
   </head>
+  <body>
+    <h1>Soccer Quiz!</h1>
+    <form id = "quiz" name = "quiz">
+      <p>How many Superbowls have the New York Giants won?</p>
+      <select id='q1'>
+        <option name = "question1" value = "Choose an answer">Choose an answer</option>
+        <option name = "question1" value = "3">3</option>
+        <option name = "question1" value = "4">4</option>
+      </select>
+    
+      <p>How many World Cups has Brazil won?</p>
+      <select id='q2'>
+        <option name = "question2" value = "Choose an answer">Choose an answer</option>
+        <option name = "question2" value = "6">6</option>
+        <option name = "question2" value = "5">5</option>
+      </select>
 
-<h1>Quiz on Soccer</h1>
-<div class="quiz-container">
-  <div id="quiz"></div>
-</div>
-<button id="previous">Previous Question</button>
-<button id="next">Next Question</button>
-<button id="submit">Submit Quiz</button>
-<div id="results"></div>
+      <p>How many Superbowls have the Cleveland Browns won?</p>
+      <select id='q3'>
+        <option name = "question3" value = "Choose an answer">Choose an answer</option>
+        <option name = "question3" value = "0">0</option>
+        <option name = "question3" value = "2">2</option>
+      </select>
+
+      <p>How many Superbowls have the San Francisco 49ers won?</p>
+      <select id='q4'>
+        <option name = "question4" value = "Choose an answer">Choose an answer</option>
+        <option name = "question4" value = "4">4</option>
+        <option name = "question4" value = "5">5</option>
+      </select>
+
+      <p>How many Superbowls have the Buffalo Bills won?</p>
+      <select id='q5'>
+        <option name = "question5" value = "Choose an answer">Choose an answer</option>
+        <option name = "question5" value = "0">0</option>
+        <option name = "question5" value = "1">1</option>
+      </select>
+      
+      <p>How many Superbowls have the Dallas Cowboys won?</p>
+      <select id='q6'>
+        <option name = "question6" value = "Choose an answer">Choose an answer</option>
+        <option name = "question6" value = "5">5</option>
+        <option name = "question6" value = "3">3</option>
+      </select>
+
+      <p>How many Superbowls have the New York Jets won?</p>
+      <select id='q7'>
+        <option name = "question7" value = "Choose an answer">Choose an answer</option>
+        <option name = "question7" value = "2">2</option>
+        <option name = "question7" value = "1">1</option>
+      </select>
+
+      <p>How many Superbowls have the Houston Texans won?</p>
+      <select id='q8'>
+        <option name = "question8" value = "Choose an answer">Choose an answer</option>
+        <option name = "question8" value = "0">0</option>
+        <option name = "question8" value = "2">2</option>
+      </select>
+
+      <p>How many Superbowls have the Kansas City Chiefs won?</p>
+      <select id='q9'>
+        <option name = "question9" value = "Choose an answer">Choose an answer</option>
+        <option name = "question9" value = "1">1</option>
+        <option name = "question9" value = "3">3</option>
+      </select>
+
+      <p>How many Superbowls have the Denver Broncos won?</p>
+      <select id='q10'>
+        <option name = "question10" value = "Choose an answer">Choose an answer</option>
+        <option name = "question10" value = "3">3</option>
+        <option name = "question10" value = "2">2</option>
+      </select></br></br>
+
+      <input id = "button" type = "button" value = "Done" onclick = "check();">
+      
+      
+    </form>
+    
+    <div id = "after_submit">
+      <p id = "message"></p>
+      <p id = "number_correct"></p>
+    </div>
+    
+</html>
+  
+</body>
+
+</html>
