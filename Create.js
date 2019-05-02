@@ -19,7 +19,7 @@ function check(){
     if (question2 == "5") {
        correct++;
      }
-    if (question3 == "1") {
+    if (question3 == "13") {
        correct++;
      }
     if (question4 == "5") {
