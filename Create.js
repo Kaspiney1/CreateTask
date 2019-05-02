@@ -13,10 +13,10 @@ function check(){
   var question10 = document.getElementById("q10").value;
   var correct = 0;
   
-     if (question1 == "4") {
+     if (question1 == "Messi") {
        correct++;
      }
-    if (question2 == "6") {
+    if (question2 == "5") {
        correct++;
      }
     if (question3 == "0") {
@@ -44,7 +44,7 @@ function check(){
        correct++;
      }
   console.log(correct)
-  var messages = ["Great Job!", "That's just decent", "Your football knowledge is awful"];
+  var messages = ["Nice, you passed!", "You have a bit of catching up to do", "Do you even watch soccer?"];
   
   var range;
   
